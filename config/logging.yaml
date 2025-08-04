@@ -1,0 +1,45 @@
+version: 1
+disable_existing_loggers: False
+
+formatters:
+  myFormatter:
+    format: "%(asctime)s.%(msecs)03d %(levelname)s %(module)s - %(funcName)s: %(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
+
+handlers:
+  consoleHandler:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: myFormatter
+    stream: ext://sys.stdout
+
+  fileHandler:
+    class: logging.FileHandler
+    level: DEBUG
+    formatter: myFormatter
+    filename: logs/logfile.log
+
+loggers:
+  api_tests:
+    level: DEBUG
+    handlers: [fileHandler]
+    propagate: no
+
+  validator:
+    level: DEBUG
+    handlers: [fileHandler]
+    propagate: no
+
+  book_validator:
+    level: DEBUG
+    handlers: [fileHandler]
+    propagate: no
+
+  author_validator:
+    level: DEBUG
+    handlers: [fileHandler]
+    propagate: no
+
+root:
+  level: DEBUG
+  handlers: [consoleHandler]
