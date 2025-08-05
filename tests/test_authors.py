@@ -93,7 +93,7 @@ class TestAuthors:
         self.log.info("test_create_author_with_nullable: %s", payload_name)
         response = requests.post(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.AUTHORS.value}", json=payload)
         assert self.validator.validate_ok_response(response)
-        response = requests.get(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/{payload["author_id"]}")
+        response = requests.get(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/{payload["id"]}")
         assert self.validator.validate_get_single_author_response(response)
 
     @pytest.mark.parametrize(
@@ -104,10 +104,10 @@ class TestAuthors:
     def test_replace_author_with_nullable(self, payload_name, payload):
         self.log.info("test_replace_author_with_nullable: %s", payload_name)
         response = requests.put(
-            f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.AUTHORS.value}/{payload["author_id"]}", json=payload)
+            f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.AUTHORS.value}/{payload["id"]}", json=payload)
         assert self.validator.validate_ok_response(response)
         response = requests.get(
-            f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/{payload["author_id"]}")
+            f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/{payload["id"]}")
         assert self.validator.validate_get_single_author_response(response)
 
     # should create a new one
