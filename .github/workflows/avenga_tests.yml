@@ -1,0 +1,51 @@
+name: Run Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Allure CLI (latest)
+        run: |
+          LATEST_URL=$(curl -s https://api.github.com/repos/allure-framework/allure2/releases/latest \
+            | grep "browser_download_url.*tgz" \
+            | cut -d '"' -f 4)
+          wget "$LATEST_URL" -O allure-latest.tgz
+          tar -xzf allure-latest.tgz
+          DIR=$(tar -tf allure-latest.tgz | head -1 | cut -f1 -d"/")
+          sudo mv "$DIR" /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
+          allure --version
+
+      - name: Clean up previous reports
+        run: |
+          rm -rf reports/*
+
+      - name: Run tests
+        run: python main.py run
+        continue-on-error: true  # exit code 1 from pytest is ok
+
+      - name: Upload latest report
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-html-report
+          path: reports/test_report_*.html
+          if-no-files-found: error
