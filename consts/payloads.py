@@ -201,3 +201,123 @@ class BooksNullablePayloads(Enum):
             "excerpt": "",
             "publishDate": BookHelpers.generate_book_publish_date()
         }
+
+
+class AuthorsNullablePayload(Enum):
+    EMPTY_FIRST_NAME = {
+            "id": BookHelpers.generate_id(),
+            "idBook": BookHelpers.generate_id(),
+            "firstName": "",
+            "lastName": "The Red",
+        }
+    EMPTY_LAST_NAME = {
+            "id": BookHelpers.generate_id(),
+            "idBook": BookHelpers.generate_id(),
+            "firstName": "Ipslore",
+            "lastName": "",
+        }
+
+class AuthorsBasePayload:
+    INVALID_ID = {
+            "id": "author1",
+            "idBook": BookHelpers.generate_id(),
+            "firstName": "Lorem",
+            "lastName": "Ipsum",
+        }
+    DUPLICATE_ID = {
+            "id": 1,
+            "idBook": BookHelpers.generate_id(),
+            "firstName": "Lorem",
+            "lastName": "Ipsum",
+        }
+    TOO_LARGE_ID = {
+            "id": 2147483648,
+            "idBook": BookHelpers.generate_id(),
+            "firstName": "Lorem",
+            "lastName": "Ipsum",
+        }
+
+    INVALID_BOOK_ID = {
+            "id": BookHelpers.generate_id(),
+            "idBook": "book1",
+            "firstName": "Lorem",
+            "lastName": "Ipsum",
+        }
+
+    TOO_LARGE_BOOK_ID = {
+            "id": BookHelpers.generate_id(),
+            "idBook": 2147483648,
+            "firstName": "Lorem",
+            "lastName": "Ipsum",
+        }
+
+    EMPTY_PAYLOAD = {}
+
+    MISSING_ID = {
+            "idBook": BookHelpers.generate_id(),
+            "firstName": "Lorem",
+            "lastName": "Ipsum",
+        }
+    MISSING_BOOK_ID = {
+            "id": BookHelpers.generate_id(),
+            "firstName": "Lorem",
+            "lastName": "Ipsum",
+        }
+
+    MISSING_FIRST_NAME = {
+        "id": BookHelpers.generate_id(),
+        "idBook": BookHelpers.generate_id(),
+        "lastName": "Ipsum",
+    }
+
+    MISSING_LAST_NAME = {
+        "id": BookHelpers.generate_id(),
+        "idBook": BookHelpers.generate_id(),
+        "firstName": "Lorem",
+    }
+
+    # backend may cast it into string - needs to be verified
+    INVALID_FIRST_NAME = {
+        "id": BookHelpers.generate_id(),
+        "idBook": BookHelpers.generate_id(),
+        "firstName": 123456789,
+        "lastName": "Ipsum",
+    }
+
+    # backend may cast it into string - needs to be verified
+    INVALID_LAST_NAME = {
+        "id": BookHelpers.generate_id(),
+        "idBook": BookHelpers.generate_id(),
+        "firstName": "Lorem",
+        "lastName": 123456789
+    }
+
+class AuthorsPostPayload(Enum):
+    DUPLICATE_ID = AuthorsBasePayload.DUPLICATE_ID
+    INVALID_ID = AuthorsBasePayload.INVALID_ID
+    TOO_LARGE_ID = AuthorsBasePayload.TOO_LARGE_ID
+    INVALID_BOOK_ID = AuthorsBasePayload.INVALID_BOOK_ID
+    TOO_LARGE_BOOK_ID = AuthorsBasePayload.TOO_LARGE_BOOK_ID
+    EMPTY_PAYLOAD = AuthorsBasePayload.EMPTY_PAYLOAD
+    MISSING_ID = AuthorsBasePayload.MISSING_ID
+    MISSING_BOOK_ID = AuthorsBasePayload.MISSING_BOOK_ID
+    MISSING_FIRST_NAME = AuthorsBasePayload.MISSING_FIRST_NAME
+    MISSING_LAST_NAME = AuthorsBasePayload.MISSING_LAST_NAME
+    INVALID_FIRST_NAME = AuthorsBasePayload.INVALID_FIRST_NAME
+    INVALID_LAST_NAME = AuthorsBasePayload.INVALID_LAST_NAME
+
+
+class AuthorsPutPayload(Enum):
+    # this should not be allowed - primary key change
+    INVALID_ID = AuthorsBasePayload.INVALID_ID
+    # this should not be allowed - primary key change
+    TOO_LARGE_ID = AuthorsBasePayload.TOO_LARGE_ID
+    INVALID_BOOK_ID = AuthorsBasePayload.INVALID_BOOK_ID
+    TOO_LARGE_BOOK_ID = AuthorsBasePayload.TOO_LARGE_BOOK_ID
+    EMPTY_PAYLOAD = AuthorsBasePayload.EMPTY_PAYLOAD
+    MISSING_ID = AuthorsBasePayload.MISSING_ID
+    MISSING_BOOK_ID = AuthorsBasePayload.MISSING_BOOK_ID
+    MISSING_FIRST_NAME = AuthorsBasePayload.MISSING_FIRST_NAME
+    MISSING_LAST_NAME = AuthorsBasePayload.MISSING_LAST_NAME
+    INVALID_FIRST_NAME = AuthorsBasePayload.INVALID_FIRST_NAME
+    INVALID_LAST_NAME = AuthorsBasePayload.INVALID_LAST_NAME

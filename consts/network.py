@@ -7,3 +7,4 @@ class Network(Enum):
     # endpoints
     BOOKS = "/api/v1/Books"
     AUTHORS = "/api/v1/Authors"
+    AUTHORS_BOOKS = "/api/v1/Authors/authors/books"
