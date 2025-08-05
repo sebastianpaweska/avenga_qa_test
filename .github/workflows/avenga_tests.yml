@@ -41,7 +41,11 @@ jobs:
 
       - name: Run tests
         run: python main.py run
-        continue-on-error: true  # exit code 1 from pytest is ok
+        # in this scenario exit code 1 from pytest is ok
+        # as there are multiple errors that should be reported and marked as xfail
+        # in real wolrd scenario we should only accept exit code 0 to see that tests have failures
+        # on the other hand that's just exit code from tests, not from the entire process which didn't fail
+        continue-on-error: true
 
       - name: Upload latest report
         uses: actions/upload-artifact@v4
