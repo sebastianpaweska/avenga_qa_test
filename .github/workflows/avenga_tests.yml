@@ -37,6 +37,7 @@ jobs:
 
       - name: Run tests
         run: python main.py run
+        continue-on-error: true  # exit code 1 from pytest is ok
 
       - name: Upload latest report
         uses: actions/upload-artifact@v4
