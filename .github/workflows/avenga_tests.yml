@@ -23,11 +23,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Install Allure CLI
+      - name: Install Allure CLI (latest)
         run: |
-          wget https://github.com/allure-framework/allure2/releases/latest/download/allure-2.27.0.tgz
-          tar -xzf allure-2.27.0.tgz
-          sudo mv allure-2.27.0 /opt/allure
+          LATEST_URL=$(curl -s https://api.github.com/repos/allure-framework/allure2/releases/latest \
+            | grep "browser_download_url.*tgz" \
+            | cut -d '"' -f 4)
+          wget "$LATEST_URL" -O allure-latest.tgz
+          tar -xzf allure-latest.tgz
+          DIR=$(tar -tf allure-latest.tgz | head -1 | cut -f1 -d"/")
+          sudo mv "$DIR" /opt/allure
           sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
           allure --version
 
