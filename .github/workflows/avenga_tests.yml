@@ -35,6 +35,10 @@ jobs:
           sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
           allure --version
 
+      - name: Clean up previous reports
+        run: |
+          rm -rf reports/*
+
       - name: Run tests
         run: python main.py run
         continue-on-error: true  # exit code 1 from pytest is ok
