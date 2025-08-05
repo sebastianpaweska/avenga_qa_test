@@ -6,7 +6,7 @@ import time
 from consts.network import Network
 from validators.book_valiidator import BookValidator
 from helpers.book_helpers import BookHelpers
-from consts.payloads import BooksPostPayloads, BooksPutPayloads
+from consts.payloads import BooksPostPayloads, BooksPutPayloads, BooksNullablePayloads
 
 @pytest.mark.books
 class TestBooks:
@@ -76,106 +76,26 @@ class TestBooks:
         assert self.validator.validate_not_found_response(response)
 
     # nullable - creation should work, validation will fail
-    @pytest.mark.xfail(reason="fake api")
-    def test_create_book_with_empty_title(self):
-        self.log.info("test_create_book_with_empty_title")
-        book_id = BookHelpers.generate_id()
-        payload = {
-            "id": book_id,
-            "title": "",
-            "description":"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
-            "pageCount": 123,
-            "excerpt": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
-            "publishDate": BookHelpers.generate_book_publish_date()
-        }
+    @pytest.mark.parametrize(
+        "payload_name,payload",
+        [(p.name, p.value) for p in BooksNullablePayloads],
+        ids=[p.name.lower() for p in BooksNullablePayloads]
+    )
+    def test_create_with_nullables(self, payload_name, payload):
+        self.log.info("test_create_with_nullables: %s", payload_name)
         response = requests.post(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}", json=payload)
         assert self.validator.validate_ok_response(response)
-        response = requests.get(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/{book_id}")
+        response = requests.get(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/{payload["id"]}")
         assert self.validator.validate_get_single_book_response(response)
 
     # nullable - creation should work, validation will fail
-    @pytest.mark.xfail(reason="fake api")
-    def test_create_book_with_empty_description(self):
-        self.log.info("test_create_book_with_empty_description")
-        book_id = BookHelpers.generate_id()
-        payload = {
-            "id": book_id,
-            "title": "Sed ut perspiciatis",
-            "description":"",
-            "pageCount": 123,
-            "excerpt": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
-            "publishDate": BookHelpers.generate_book_publish_date()
-        }
-        response = requests.post(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}", json=payload)
-        assert self.validator.validate_ok_response(response)
-        response = requests.get(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/{book_id}")
-        assert self.validator.validate_get_single_book_response(response)
-
-    # nullable - creation should work, validation will fail
-    @pytest.mark.xfail(reason="fake api")
-    def test_create_book_with_empty_excerpt(self):
-        self.log.info("test_create_book_with_empty_excerpt")
-        book_id = BookHelpers.generate_id()
-        payload = {
-            "id": book_id,
-            "title": "Sed ut perspiciatis",
-            "description":"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
-            "pageCount": 123,
-            "excerpt": "",
-            "publishDate": BookHelpers.generate_book_publish_date()
-        }
-        response = requests.post(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}", json=payload)
-        assert self.validator.validate_ok_response(response)
-        response = requests.get(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/{book_id}")
-        assert self.validator.validate_get_single_book_response(response)
-
-    @pytest.mark.xfail(reason="fake api")
-    def test_replace_book_empty_title(self):
-        self.log.info("test_replace_book_empty_title")
-        payload = {
-            "id": 1,
-            "title": "",
-            "description":"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
-            "pageCount": 123,
-            "excerpt": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
-            "publishDate": BookHelpers.generate_book_publish_date()
-        }
-        response = requests.put(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/1", json=payload)
-        assert self.validator.validate_ok_response(response)
-        response = requests.get(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/1")
-        assert self.validator.validate_get_single_book_response(response)
-        # this will fail on that API
-        assert self.validator.validate_book_replaced(response, payload)
-
-    @pytest.mark.xfail(reason="fake api")
-    def test_replace_book_empty_description(self):
-        self.log.info("test_replace_book_empty_description")
-        payload = {
-            "id": 1,
-            "title": "Sed ut perspiciatis",
-            "description":"",
-            "pageCount": 123,
-            "excerpt": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
-            "publishDate": BookHelpers.generate_book_publish_date()
-        }
-        response = requests.put(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/1", json=payload)
-        assert self.validator.validate_ok_response(response)
-        response = requests.get(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/1")
-        assert self.validator.validate_get_single_book_response(response)
-        # this will fail on that API
-        assert self.validator.validate_book_replaced(response, payload)
-
-    @pytest.mark.xfail(reason="fake api")
-    def test_replace_book_empty_excerpt(self):
-        self.log.info("test_replace_book")
-        payload = {
-            "id": 1,
-            "title": "Sed ut perspiciatis",
-            "description":"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
-            "pageCount": 123,
-            "excerpt": "",
-            "publishDate": BookHelpers.generate_book_publish_date()
-        }
+    @pytest.mark.parametrize(
+        "payload_name,payload",
+        [(p.name, p.value) for p in BooksNullablePayloads],
+        ids=[p.name.lower() for p in BooksNullablePayloads]
+    )
+    def test_replace_book_with_nullables(self, payload_name, payload):
+        self.log.info("test_replace_book_with_nullables: %s", payload_name)
         response = requests.put(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/1", json=payload)
         assert self.validator.validate_ok_response(response)
         response = requests.get(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/1")

@@ -174,3 +174,30 @@ class BooksPutPayloads(Enum):
     INVALID_DESCRIPTION = BooksBasePayload.INVALID_DESCRIPTION
     # backend may cast it into string - needs to be verified
     INVALID_EXCERPT = BooksBasePayload.INVALID_EXCERPT
+
+
+class BooksNullablePayloads(Enum):
+    EMPTY_TITLE = {
+        "id": BookHelpers.generate_id(),
+        "title": "",
+        "description": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
+        "pageCount": 123,
+        "excerpt": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
+        "publishDate": BookHelpers.generate_book_publish_date()
+    }
+    EMPTY_DESCRIPTION = {
+            "id": BookHelpers.generate_id(),
+            "title": "Sed ut perspiciatis",
+            "description":"",
+            "pageCount": 123,
+            "excerpt": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
+            "publishDate": BookHelpers.generate_book_publish_date()
+        }
+    EMPTY_EXCERPT = {
+            "id": BookHelpers.generate_id(),
+            "title": "Sed ut perspiciatis",
+            "description":"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium",
+            "pageCount": 123,
+            "excerpt": "",
+            "publishDate": BookHelpers.generate_book_publish_date()
+        }
