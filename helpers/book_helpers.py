@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 
 class BookHelpers:
     @staticmethod
-    def generate_book_id():
+    def generate_id():
         max_int32 = 2 ** 31 - 1
         # for the purpose of testing this API generate ids in range larger than the max id in the API
         return random.randint(201, max_int32)
