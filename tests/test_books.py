@@ -81,7 +81,7 @@ class TestBooks:
         [(p.name, p.value) for p in BooksNullablePayloads],
         ids=[p.name.lower() for p in BooksNullablePayloads]
     )
-    def test_create_with_nullables(self, payload_name, payload):
+    def test_create_book_with_nullables(self, payload_name, payload):
         self.log.info("test_create_with_nullables: %s", payload_name)
         response = requests.post(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}", json=payload)
         assert self.validator.validate_ok_response(response)
