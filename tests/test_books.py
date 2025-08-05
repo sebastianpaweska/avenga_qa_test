@@ -30,7 +30,6 @@ class TestBooks:
         response = requests.get(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/1")
         assert self.validator.validate_get_single_book_response(response)
 
-    @pytest.mark.xfail(reason="fake api")
     def test_create_book(self):
         self.log.info("test_create_book")
         book_id = BookHelpers.generate_id()
@@ -47,7 +46,6 @@ class TestBooks:
         response = requests.get(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/{book_id}")
         assert self.validator.validate_get_single_book_response(response)
 
-    @pytest.mark.xfail(reason="fake api")
     def test_replace_book(self):
         self.log.info("test_replace_book")
         payload = {
@@ -66,7 +64,6 @@ class TestBooks:
         assert self.validator.validate_book_replaced(response, payload)
 
     # is it needed to fill the db before running this test?
-    @pytest.mark.xfail(reason="fake api")
     def test_delete_book(self):
         self.log.info("test_delete_book")
         response = requests.delete(f"{Network.PROTOCOL.value}://{Network.API_URL.value}{Network.BOOKS.value}/1")
